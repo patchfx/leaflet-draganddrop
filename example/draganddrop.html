@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Leaflet debug page</title>
+
+	<link rel="stylesheet" href="../lib/leaflet/leaflet.css" />
+	<!--[if lte IE 8]><link rel="stylesheet" href="../lib/leaflet/leaflet.ie.css" /><![endif]-->
+	<link rel="stylesheet" href="style.css" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<script src="../lib/leaflet/leaflet-src.js"></script>
+	<script src="../src/DomUtil.js"></script>
+	<script src="../src/Droppable.js"></script>
+	<script src="../src/DropManager.js"></script>
+	<script src="../src/DragAndDropMarker.js"></script>
+	<script src="../src/DragAndDropMarker.Drag.js"></script>
+</head>
+<body>
+	<h1>Leaflet Drag and Drop</h1>
+	<div id="map"></div>
+	<div id="drop-container" class="drop-container-unselected">
+		DROP MARKERS HERE
+	</div>
+	<div id="drop-container-2" class="drop-container-unselected">
+		DROP MARKERS HERE
+	</div>
+
+	<script type="text/javascript">
+
+		function getRandomLatLng(map) {
+			var bounds = map.getBounds(),
+				southWest = bounds.getSouthWest(),
+				northEast = bounds.getNorthEast(),
+				lngSpan = northEast.lng - southWest.lng,
+				latSpan = northEast.lat - southWest.lat;
+
+			return new L.LatLng(
+					southWest.lat + latSpan * Math.random(),
+			        southWest.lng + lngSpan * Math.random());
+		}
+
+		var cloudmade = L.tileLayer('http://{s}.tile.cloudmade.com/{key}/997/256/{z}/{x}/{y}.png', {
+				maxZoom: 18,
+				attribution: 'Map data &copy; 2011 OpenStreetMap contributors, Imagery &copy; 2011 CloudMade',
+				key: 'BC9A493B41014CAABB98F0471D759707'
+			});
+
+		var map = L.map('map')
+				.setView([-37.7874, 175.2791], 14)
+				.addLayer(cloudmade);
+
+		var markers = new L.FeatureGroup(),
+			marker;
+		
+		var dropContainer = document.getElementById('drop-container'),
+			dropContainer2 = document.getElementById('drop-container-2');
+
+		var dropManager = new L.DropManager([dropContainer, dropContainer2]);
+
+		function populate() {
+			for (var i = 0; i < 10; i++) {
+				marker = new L.DragAndDropMarker(getRandomLatLng(map), {
+					dropManager: dropManager,
+					data: {
+						"store_id":"5582",
+						"description":"Asda<br>WIGAN (NEW)",
+						"easting":"356966",
+						"northing":"405374",
+						"type":"Store",
+						"draggable":"Y",
+						"lat":"53.543233000000",
+						"lon":"-2.650878000000",
+						"format":"green_store"
+					}
+				});
+				marker
+					.on('overdropcontainer', function (e) {
+						e.container.className = 'drop-container-selected';
+						e.container.innerHTML = 'RELEASE MOUSE TO DROP MARKER';						
+					})
+					.on('leftdropcontainer', function (e) {
+						e.container.className = 'drop-container-unselected';
+						e.container.innerHTML = 'DROP MARKERS HERE';
+					})
+					.on('dropped', function (e) {
+						alert("{\n" +
+							"   store_id: " + e.data.store_id + "\n" +
+							"   description: " + e.data.description + "\n" +
+							"   easting: " + e.data.easting + "\n" +
+							"   northing: " + e.data.northing + "\n" +
+							"   type: " + e.data.type + "\n" +
+							"   draggable: " + e.data.draggable + "\n" +
+							"   lat: " + e.data.lat + "\n" +
+							"   lon: " + e.data.lon + "\n" +
+							"   format: " + e.data.format + "\n" +
+							"}"
+						);
+					});
+				markers.addLayer(marker);
+			}
+			return false;
+		}
+
+		markers.bindPopup("<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.</p><p>Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque.</p>");
+
+		map.addLayer(markers);
+
+		populate();
+
+//		function logEvent(e) { console.log(e.type); }
+//
+//		map.on('movestart', logEvent);
+//		map.on('move', logEvent);
+//		map.on('moveend', logEvent);
+//
+//		map.on('zoomstart', logEvent);
+//		map.on('zoomend', logEvent);
+
+		
+
+
+	</script>
+</body>
+</html>

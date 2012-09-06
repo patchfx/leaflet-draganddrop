@@ -1,0 +1,46 @@
+body, html {
+	background-color: #f5f5f5;
+	color: #303942;
+	font: 12px/1.5 'Segoe UI', Tahoma, sans-serif;
+	margin: 0;
+	text-shadow: 0 1px 1px #fff;
+	width: 100%;
+}
+
+h1 {
+	text-align: center;
+	width: 100%;
+}
+
+#map {
+	border: 1px solid #ddd;
+	margin: 0 auto;
+	width: 640px; 
+	height: 480px;
+}
+
+#drop-container,
+#drop-container-2 {
+	border-style: dashed;
+	border-width: 3px;
+	border-radius: 7px;
+	font-size: 1.5em;
+	font-weight: bold;
+	line-height: 120px;
+	margin: 40px auto 0;
+	text-align: center;
+	width: 640px;
+	height: 120px;
+}
+
+.drop-container-unselected {
+	background-color: #e5e5e5;
+	border-color: #cacaca;
+	color: #bbb;
+}
+
+.drop-container-selected {
+	background-color: #FFF0F7;
+	border-color: #FFB6D7;
+	color: #FFB6D7;
+}
